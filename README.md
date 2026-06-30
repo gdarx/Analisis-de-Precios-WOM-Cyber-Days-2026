@@ -10,13 +10,13 @@
 
 ---
 
-## 📌 Pregunta de negocio
+## Pregunta de negocio
 
 ¿WOM realmente baja sus precios durante el Cyber Days? ¿Qué marcas benefician más al consumidor? ¿Cuánto duran los descuentos una vez terminado el evento?
 
 ---
 
-## 🛠️ Pipeline del proyecto
+## Pipeline del proyecto
 
 ```
 API interna WOM
@@ -38,11 +38,11 @@ API interna WOM
 
 ---
 
-## ⚙️ Metodología de extracción
+## Metodología de extracción
 
 El script consume directamente la **API interna de WOM** (`store-srv.wom.cl/rest/V1/content/getGraphqlDataFromSkus`) mediante `requests`, sin parseo de HTML. La API requiere una lista explícita de SKUs que fueron **relevados manualmente** desde el catálogo web en cada fecha de extracción.
 
-> ⚠️ Nota metodológica: equipos publicados por WOM con posterioridad a la primera extracción (13/05) no están incluidos en el dataset.
+> Nota metodológica: equipos publicados por WOM con posterioridad a la primera extracción (13/05) no están incluidos en el dataset.
 
 Por cada SKU, la API entrega los precios correspondientes a los distintos planes disponibles. WOM ofrece precios diferenciados según el tipo de contrato del cliente:
 
@@ -56,7 +56,7 @@ Por cada SKU, la API entrega los precios correspondientes a los distintos planes
 
 ---
 
-## 📅 Períodos analizados
+## Períodos analizados
 
 | # | Período | Fecha | Registros |
 |---|---|---|---|
@@ -69,14 +69,14 @@ Por cada SKU, la API entrega los precios correspondientes a los distintos planes
 
 ---
 
-## 🗂️ Estructura del repositorio
+## Estructura del repositorio
 
 ```
 wom-cyber-analysis/
 │
 ├── scraping/
-│   ├── WOM_v2.ipynb              # Extracción vía API + limpieza por período
-│   └── union_wom.ipynb           # Consolidación de los 5 CSV en un único dataset
+│   ├── Extraccion.ipynb              # Extracción vía API + limpieza por período
+│   └── Consolidacion.ipynb           # Consolidación de los 5 CSV en un único dataset
 │
 ├── data/
 │   └── wom_total_unido2.csv      # Dataset consolidado final (602 registros)
@@ -89,7 +89,7 @@ wom-cyber-analysis/
 
 ---
 
-## 🔄 ETL en Power Query
+## ETL en Power Query
 
 Antes de construir el dashboard, se realizaron las siguientes transformaciones en Power Query:
 
@@ -119,12 +119,13 @@ Segmento =
   if [precio_portabilidad/renovacion] < 150000  then "Básico"
   else if [precio_portabilidad/renovacion] < 400000  then "Gama Media"
   else if [precio_portabilidad/renovacion] < 800000  then "Gama Alta"
-  else "Premium"
+  else if [precio_portabilidad/renovacion] >= 800000  "Premium"
+  else "No hay datos"
 ```
 
 ---
 
-## 📈 Dataset consolidado
+## Dataset consolidado
 
 - **602 registros** — 5 períodos concatenados
 - **122 SKUs únicos** por período
@@ -133,7 +134,7 @@ Segmento =
 
 ---
 
-## 🔍 Hallazgos principales
+## Hallazgos principales
 
 ### 1. El 70% del catálogo no bajó de precio durante el Cyber Days
 De 120 productos, **84 (70%) mantuvieron exactamente el mismo precio** de portabilidad/renovación durante el evento. Solo 36 equipos (30%) registraron una reducción real.
@@ -170,7 +171,7 @@ Con menos del 7% del catálogo, Samsung concentra los productos con mayor ahorro
 
 ---
 
-## 📊 Dashboard Power BI — 3 páginas
+## Dashboard Power BI — 3 páginas
 
 **Resumen Ejecutivo** — Jerarquía de precios WOM (Base → Prepago → Línea Nueva → Portabilidad/Renovación), catálogo por marca, distribución por segmento de gama y equipos con descuento activo por período.
 
@@ -180,11 +181,11 @@ Con menos del 7% del catálogo, Samsung concentra los productos con mayor ahorro
 
 ---
 
-## ▶️ Cómo reproducir el análisis
+## Cómo reproducir el análisis
 
 **1. Extracción — Google Colab**
 
-Abre `scraping/WOM_v2.ipynb` en Google Colab y ejecuta todas las celdas. El script genera un CSV por ejecución. Repite el proceso en cada período que quieras analizar.
+Abre `scraping/Extraccion.ipynb` en Google Colab y ejecuta todas las celdas. El script genera un CSV por ejecución. Repite el proceso en cada período que quieras analizar.
 
 ```python
 # Las únicas variables a revisar entre períodos:
@@ -194,15 +195,15 @@ SKUS = "..."  # Actualizar si WOM incorpora nuevos modelos al catálogo
 
 **2. Consolidación — Google Colab**
 
-Abre `scraping/union_wom.ipynb`, actualiza los nombres de los archivos CSV a concatenar y ejecuta. El script une todos los períodos en `wom_total_unido2.csv`.
+Abre `scraping/Consolidacion.ipynb`, actualiza los nombres de los archivos CSV a concatenar y ejecuta. El script une todos los períodos en `wom_total_unido2.csv`.
 
 **3. Carga en Power BI**
 
-Importa `wom_total_unido2.csv` en Power BI Desktop vía Power Query. Aplica las transformaciones de tipos y columnas calculadas descritas en la sección ETL. Verifica que los precios no presenten el problema del `,00` antes de construir las medidas DAX.
+Importa `wom_consolidado.csv` en Power BI Desktop vía Power Query. Aplica las transformaciones de tipos y columnas calculadas descritas en la sección ETL. Verifica que los precios no presenten el problema del `,00` antes de construir las medidas DAX.
 
 ---
 
-## 👤 Autor
+## Autor
 
 **Bryan Alarcón**  
 Ingeniero Comercial · Business Analytics
@@ -212,7 +213,7 @@ Ingeniero Comercial · Business Analytics
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto es de uso libre para fines educativos y de portafolio.  
 Los datos fueron obtenidos desde la API de WOM Chile únicamente con fines analíticos y académicos.
