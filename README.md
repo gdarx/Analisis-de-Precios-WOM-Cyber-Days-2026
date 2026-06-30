@@ -177,7 +177,7 @@ Con menos del 7% del catálogo, Samsung concentra los productos con mayor ahorro
 
 ## Dashboard Power BI — 3 páginas
 
-![Resumen Ejecutivo](img/WOM_DASH(1).png)
+![Resumen Ejecutivo](img/WOM_DASH_(1).png)
 
 **Resumen Ejecutivo** — Jerarquía de precios WOM (Base → Prepago → Línea Nueva → Portabilidad/Renovación), catálogo por marca, distribución por segmento de gama y equipos con descuento activo por período.
 
