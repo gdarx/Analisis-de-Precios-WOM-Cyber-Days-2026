@@ -22,12 +22,12 @@
 API interna WOM
       │
       ▼
- WOM_v2.ipynb               ← Extracción + limpieza (Google Colab)
+ Extraccion.ipynb               ← Extracción + limpieza (Google Colab)
  (5 ejecuciones, una        ← Una por período
   por período)
       │
       ▼ 5 archivos CSV
- union_wom.ipynb            ← Consolidación en un único dataset
+ Consolidacion.ipynb            ← Consolidación en un único dataset
       │
       ▼ wom_total_unido2.csv (602 registros)
  Power Query (Power BI)     ← ETL final: tipos, columnas calculadas
