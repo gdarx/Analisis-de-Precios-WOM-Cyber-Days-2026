@@ -177,13 +177,17 @@ Con menos del 7% del catálogo, Samsung concentra los productos con mayor ahorro
 
 ## Dashboard Power BI — 3 páginas
 
-![Resumen Ejecutivo](img/WOM_DASH_(1).png)
-
 **Resumen Ejecutivo** — Jerarquía de precios WOM (Base → Prepago → Línea Nueva → Portabilidad/Renovación), catálogo por marca, distribución por segmento de gama y equipos con descuento activo por período.
+
+![Resumen Ejecutivo](img/WOM_DASH_(1).png)
 
 **Análisis Cyber Days** — Cuántos equipos bajaron realmente de precio, subsidio comercial por marca, descuento táctico en los 5 períodos, top 5 productos por ahorro absoluto y posicionamiento estratégico de marca (precio base vs. % descuento).
 
+![Análisis Cyber Days](img/WOM_DASH_(2).png)
+
 **Post Cyber** — Evolución de los 4 tipos de precio en los 5 períodos, clasificación del resultado post-evento por estado y tabla de trazabilidad producto × período con deltas ΔN→C1, ΔC1→C2, ΔN→PC.
+
+![Post Cyber](img/WOM_DASH_(3).png)
 
 ---
 
