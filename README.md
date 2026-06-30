@@ -42,7 +42,7 @@ API interna WOM
 
 El script consume directamente la **API interna de WOM** (`store-srv.wom.cl/rest/V1/content/getGraphqlDataFromSkus`) mediante `requests`, sin parseo de HTML. La API requiere una lista explícita de SKUs que fueron **relevados manualmente** desde el catálogo web en cada fecha de extracción.
 
-> Nota metodológica: equipos publicados por WOM con posterioridad a la primera extracción (13/05) no están incluidos en el dataset.
+> Nota: equipos publicados por WOM con posterioridad a la primera extracción (13/05) no están incluidos en el dataset.
 
 Por cada SKU, la API entrega los precios correspondientes a los distintos planes disponibles. WOM ofrece precios diferenciados según el tipo de contrato del cliente:
 
@@ -98,21 +98,7 @@ Antes de construir el dashboard, se realizaron las siguientes transformaciones e
 **Columnas calculadas añadidas:**
 
 ```
-// Período: mapeo de fecha a nombre legible
-Periodo =
-  if [fecha_extraccion] = "2026-05-13" then "Normal"
-  else if [fecha_extraccion] = "2026-06-01" then "Cyber Days"
-  else if [fecha_extraccion] = "2026-06-07" then "Cyber Extendido"
-  else if [fecha_extraccion] = "2026-06-15" then "Post Cyber"
-  else "Normal 2"
 
-// Orden de período: para eje X cronológico en gráficos
-Orden_Periodo =
-  if [fecha_extraccion] = "2026-05-13" then 1
-  else if [fecha_extraccion] = "2026-06-01" then 2
-  else if [fecha_extraccion] = "2026-06-07" then 3
-  else if [fecha_extraccion] = "2026-06-15" then 4
-  else 5
 
 // Segmento de gama (basado en precio_portabilidad/renovacion)
 Segmento =
@@ -121,6 +107,24 @@ Segmento =
   else if [precio_portabilidad/renovacion] < 800000  then "Gama Alta"
   else if [precio_portabilidad/renovacion] >= 800000  "Premium"
   else "No hay datos"
+
+// Orden de período: para eje X cronológico en gráficos
+Orden_Segmento =
+  if [Segmento] = "Básico" then 1
+  else if [Segmento] = "Gama Media" then 2
+  else if [Segmento] = "Gama Alta" then 3
+  else if [Segmento] = "Premium" then 4
+  else 5
+
+// Período: mapeo de fecha a nombre legible
+Periodo =
+  if [fecha_extraccion] = "2026-05-13" then "Normal"
+  else if [fecha_extraccion] = "2026-06-01" then "Cyber 1"
+  else if [fecha_extraccion] = "2026-06-07" then "Cyber 2"
+  else if [fecha_extraccion] = "2026-06-15" then "Post Cyber"
+  else if [fecha_extraccion] = "2026-06-22" then "Normal 2"
+  else "Error Fecha"
+
 ```
 
 ---
